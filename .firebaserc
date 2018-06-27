@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "pwa-demo-f1afa"
+    "default": "pwa-demo-f1afa",
+    "staging": "pwa-demo-new"
   }
 }

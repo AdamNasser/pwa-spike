@@ -1,19 +1,156 @@
-
 (function() {
   'use strict';
+
+
 
   var app = {
     isLoading: true,
     visibleCards: {},
-    selectedCities: [],
+    cardCount: 0, 
+    products: [  
+    {name: 'MODELO', url: 'https://api.myjson.com/bins/18eda6', imageURL: 'nil'  } , 
+    {name: 'CORONA', url: 'https://api.myjson.com/bins/19l8hq', imageURL: 'nil'  }, 
+    {name: 'PACIFICO', url: 'https://api.myjson.com/bins/1gqfr2', imageURL: 'nil'  }, 
+    {name: 'VICTORIA', url: 'https://api.myjson.com/bins/hlv26', imageURL: 'nil'  }, 
+    {name: 'BARRILITO', url: 'https://api.myjson.com/bins/wjuce', imageURL: 'nil'  }, 
+    {name: 'TOCOYA', url: 'https://api.myjson.com/bins/xqpjy', imageURL: 'nil'  }, 
+    {name: 'LEON', url: 'https://api.myjson.com/bins/ibkzi', imageURL: 'nil'  }, 
+    ] , 
+    offlineData: {"products":[{ id: "228-552-101", 
+                    brand: "OFFLINE DATA ", 
+                    brandCode: "228", 
+                    name: "CORONA EXTRA 16OZ CAN", 
+                    type: "package" 
+                    }, { id: "228-552-101", 
+                    brand: "OFFLINE DATA ", 
+                    brandCode: "228", 
+                    name: "CORONA EXTRA 16OZ CAN", 
+                    type: "package" 
+                    }, { id: "228-552-101", 
+                    brand: "OFFLINE DATA ", 
+                    brandCode: "228", 
+                    name: "CORONA EXTRA 16OZ CAN", 
+                    type: "package" 
+                    },{ id: "228-552-101", 
+                    brand: "OFFLINE DATA ", 
+                    brandCode: "228", 
+                    name: "CORONA EXTRA 16OZ CAN", 
+                    type: "package" 
+                    }]},
+    selectedProduct: -1,
     spinner: document.querySelector('.loader'),
     cardTemplate: document.querySelector('.cardTemplate'),
     container: document.querySelector('.main'),
     addDialog: document.querySelector('.dialog-container'),
+    customSelector: document.querySelector('.custom-select'), 
+    resultsText: document.querySelector('.lead'), 
     daysOfWeek: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], 
-    title: document.querySelector('.searchTitle'), 
+    selectedIndex: 0 , 
   };
 
+
+/*****************************************************************************
+   *
+   * Script to handle product custom selector and click events 
+   *
+   ****************************************************************************/
+var x, i, j, selElmnt, a, b, c;
+/*look for any elements with the class "custom-select":*/
+x = document.getElementsByClassName("custom-select");
+for (i = 0; i < x.length; i++) {
+  selElmnt = x[i].getElementsByTagName("select")[0];
+  /*for each element, create a new DIV that will act as the selected item:*/
+  a = document.createElement("DIV");
+  a.setAttribute("class", "select-selected");
+  a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+  x[i].appendChild(a);
+  /*for each element, create a new DIV that will contain the option list:*/
+  b = document.createElement("DIV");
+  b.setAttribute("class", "select-items select-hide");
+  for (j = 1; j < selElmnt.length; j++) {
+    /*for each option in the original select element,
+    create a new DIV that will act as an option item:*/
+    c = document.createElement("DIV");
+    c.innerHTML = selElmnt.options[j].innerHTML;
+
+    
+
+    c.addEventListener("click", function(e) {
+
+   var s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+/*when an item is clicked, update the original select box,
+        and the selected item:*/
+        var y, i, k, h;
+      
+        h = this.parentNode.previousSibling;
+        for (i = 0; i < s.length; i++) {
+          if (s.options[i].innerHTML == this.innerHTML) {
+            s.selectedIndex = i-1;
+            h.innerHTML = this.innerHTML;
+            y = this.parentNode.getElementsByClassName("same-as-selected");
+            for (k = 0; k < y.length; k++) {
+              y[k].removeAttribute("class");
+            }
+            this.setAttribute("class", "same-as-selected");
+            break;
+
+
+          }
+        }
+        h.click();
+
+       
+        /* clear our current product deck when the user selects a new one  */
+      for(var i = 0; i < Object.keys(app.visibleCards).length; i++) {
+      var currentCard = app.visibleCards[i]; 
+      console.log(currentCard); 
+      currentCard.parentNode.removeChild(currentCard);
+    }
+   for (var member in app.visibleCards) delete app.visibleCards[member]; 
+    /* done clearing  */ 
+
+  
+    /* get the user's new card deck */ 
+    console.log("selected index is: ", s.selectedIndex); 
+    app.selectedProduct = s.selectedIndex; 
+    app.saveSelection(); 
+    app.getProduct(s.selectedIndex);
+    });
+    b.appendChild(c);
+  }
+  x[i].appendChild(b);
+  a.addEventListener("click", function(e) {
+      /*when the select box is clicked, close any other select boxes,
+      and open/close the current select box:*/
+      e.stopPropagation();
+      closeAllSelect(this);
+      this.nextSibling.classList.toggle("select-hide");
+      this.classList.toggle("select-arrow-active");
+  });
+
+}
+function closeAllSelect(elmnt) {
+  /*a function that will close all select boxes in the document,
+  except the current select box:*/
+  var x, y, i, arrNo = [];
+  x = document.getElementsByClassName("select-items");
+  y = document.getElementsByClassName("select-selected");
+  for (i = 0; i < y.length; i++) {
+    if (elmnt == y[i]) {
+      arrNo.push(i)
+    } else {
+      y[i].classList.remove("select-arrow-active");
+    }
+  }
+  for (i = 0; i < x.length; i++) {
+    if (arrNo.indexOf(i)) {
+      x[i].classList.add("select-hide");
+    }
+  }
+}
+/*if the user clicks anywhere outside the select box,
+then close all select boxes:*/
+document.addEventListener("click", closeAllSelect);
 
 /*****************************************************************************
    *
@@ -21,85 +158,61 @@
    *
    ****************************************************************************/
 
-   document.getElementById("butAdd").addEventListener("click", function() {
-    // Open/show the add new city dialog
-    app.toggleAddDialog(true);
-  });
-
-  document.getElementById("butAddCity").addEventListener("click", function() {
-    // Add the newly selected city
-    var select = document.getElementById("selectCityToAdd");
-    var selected = select.options[select.selectedIndex];
-    var key = selected.value;
-    var label = selected.textContent;
-    if (!app.selectedCities) {
-      app.selectedCities = [];
-    }
-    //app.getForecast(key, label);
-    //app.selectedCities.push({key: key, label: label});
-    //app.saveSelectedCities();
-    app.toggleAddDialog(false);
-  });
-
-  document.getElementById("butAddCancel").addEventListener("click", function() {
-    // Close the add new city dialog
-    app.toggleAddDialog(false);
-  });
-
-
-  
-
-  // Toggles the visibility of the add new city dialog.
-  app.toggleAddDialog = function(visible) {
-    if (visible) {
-      app.addDialog.classList.add("dialog-container--visible");
-    } else {
-      app.addDialog.classList.remove("dialog-container--visible");
-    }
-  };
 
 
 
-  /*****************************************************************************
-   *
-   * Methods to update/refresh the UI
-   *
-   ****************************************************************************/
+ function updateCurrentLocation() {
+
+ }
 
  
-  // Updates a weather card with the latest weather forecast. If the card
-  // doesn't already exist, it's cloned from the template.
-  app.updateForecastCard = function(data) {
+  // Updates product cards 
+  app.updateProductCard = function(data) {
 
-    var searchText = app.title.cloneNode(true); 
-    searchText.textContent = "Hello"; 
-   
+    //var searchText = app.title.cloneNode(true); 
+   // searchText.textContent = "Hello"; 
+   //console.log(data.products[0]); 
+  
+
+    for(var i = 0; i < data.products.length; i++) {
+
+    var resultCount = data.products.length; 
+
     
 
-    for(var i = 0; i < data.length; i++) {
-    var obj = data[i]; 
-    var storeName = obj.store_name; 
-    var address = obj.address; 
-    var premise = obj.premise_type; 
+    var obj = data.products[i]; 
+    //console.log(obj); 
+
+    var brandName = obj.brand; 
+    var productName = obj.name; 
+    var productType = obj.brandCode; 
+
+
+    app.resultsText.textContent = "Displaying " + resultCount + " results for " + brandName; 
 
     //instantiate unique identifier as well 
-    var card = app.visibleCards[data.key];
 
-      
+    var card = app.visibleCards[300];
+     
     if (!card) { //create a new card if it doesnt exist 
+
+      app.cardCount += 1;     
       card = app.cardTemplate.cloneNode(true);
       card.classList.remove('cardTemplate');
-      card.querySelector('.location').textContent = data.store_name;
+      card.querySelector('.location').textContent = brandName;
       card.removeAttribute('hidden');
       card.querySelector('.back');
       app.container.appendChild(card);
-      //app.visibleCards[data.key] = card;
-    }
-     card.querySelector('.location').textContent = storeName; 
-     card.querySelector('.date').textContent = address; 
-     card.querySelector('.description').textContent = premise; 
+      app.visibleCards[i] = card; 
 
     }
+     card.querySelector('.location').textContent = brandName; 
+     card.querySelector('.date').textContent = productName; 
+     card.querySelector('.description').textContent = productType; 
+
+    }
+
+     //console.log("card count is ",app.cardCount); 
   
     if (app.isLoading) {
       app.spinner.setAttribute('hidden', true);
@@ -115,16 +228,48 @@
    *
    ****************************************************************************/
 
-  /*
-   * Gets a forecast for a specific city and updates the card with the data.
-   * getForecast() first checks if the weather data is in the cache. If so,
-   * then it gets that data and populates the card with the cached data.
-   * Then, getForecast() goes to the network for fresh data. If the network
-   * request goes through, then the card gets updated a second time with the
-   * freshest data.
-   */
-  app.getForecast = function() {
-  var url = 'https://cbi-api-internal-qa.herokuapp.com/v2/beerStores?apiKey=compass-beer&filterUnsold=Y&includeStoreRank=Y&lowerRightBound=37.330966%2C-122.029159&signature=AziYxd1PhDbUvQIAjSBfgb5fs3nsAHeO848/Y4j3FDg%3D&upperLeftBound=37.338737%2C-122.037399';
+
+//save the product the user selected to local storage 
+   app.saveSelection = function() {
+        var selectedProduct = app.selectedProduct; 
+        console.log("selected product is: "); 
+           
+        localStorage.selectedProduct = selectedProduct; 
+   }; 
+
+
+
+
+  app.getProduct = function(selectedProductIndex) {
+
+/* FOR V3 
+//first part of query string 
+  const querystring = Object.keys(data)
+  .map(key => key + '=' + encodeURIComponent(data[key]))
+  .join('&'); 
+
+//second part of query string to join the correct search term to the right %2A string 
+
+const citystring = Object.keys(citydata) 
+.map(key => key + '=' + encodeURIComponent(citydata[key])) + '*' + '%2A' + '&'; 
+
+
+const statestring = Object.keys(statedata) 
+  .map(key => key + '=' + encodeURIComponent(statedata[key])); 
+
+  var newurl = 'https://cbi-store-api-qa.herokuapp.com/v3/stores/?apiKey=compass&signature=0QJkbTzuM/WSxz9oGuUnPR4uJtGjZ4PHEUfgNJ56L/0=&' + querystring +'&'+ citystring + statestring + '/'; 
+  console.log("HELLO"); 
+  console.log(newurl); 
+  */
+
+//var url = 'https://api.myjson.com/bins/18eda6';
+
+//set the appropriate product url 
+
+console.log(selectedProductIndex); 
+app.selectedProduct = selectedProductIndex;  
+var url = app.products[selectedProductIndex].url; 
+
   // TODO add cache logic here
     
 /*
@@ -143,36 +288,47 @@
             results.key = key;
             results.label = label;
             results.created = json.query.created;
-            app.updateForecastCard(results);
+            app.updateProductCard(results);
           });
         }
       });
     }
     */
 
-    // Fetch the latest data.
-    fetch(url)
-    .then((response) => response.json())
-    .then((responseJson) => {
-    console.log(responseJson);
-    app.updateForecastCard(responseJson);  
+
+fetch(url)
+    .then(function(response) {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response.json();
+    }).then(function(responseJson) {
+        console.log(responseJson); 
+        app.updateProductCard(responseJson); 
+    }).catch(function(error) {
+        app.updateProductCard(app.offlineData); 
+        console.log(error);
     });
+
+
+   
   };
 
-  // Iterate all of the cards and attempt to get the latest forecast data
-  app.updateForecasts = function() {
-    var keys = Object.keys(app.visibleCards);
-    keys.forEach(function(key) {
-      app.getForecast(key);
-    });
-  };
+
+ 
 
 
+app.selectedProduct = localStorage.selectedProduct;
+  if(app.selectedProduct > -1) { // we have a saved selected product  
+      app.getProduct(app.selectedProduct); 
+  } else { //user is using app for the first time , present them with the initial data
+       app.getProduct(0); 
+  }
 
-  // TODO uncomment line below to test app with fake data
-  app.getForecast(); 
+   
 
-  // TODO add startup code here
+
+  
 
   // TODO add service worker code here
    if ('serviceWorker' in navigator) {
@@ -181,4 +337,8 @@
              .then(function() { console.log('Service Worker Registered'); });
 
  }
+
+
+
+
 })();

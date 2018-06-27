@@ -42,13 +42,27 @@
 <link href="splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
 <link href="splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
 <link href="splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  
+
+
+
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 300%;
+        margin-top: -100px; 
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 </head>
 <body>
 
   <header class="header">
-
-     
        <div class = "vertical1"> 
 
                         <div class="header__icon">
@@ -60,13 +74,11 @@
 
                         <div class="header-right">
 
-                            
-
                       </div>
-
 
           </div>
 
+     <button id="butAdd" class="headerButton" aria-label="Add"></button>
 
   </header>
 
@@ -74,16 +86,16 @@
 
   <div class="menu">
       <div class="menu__header">
+        
+      <img src="/icons/backgrounddemo.png">
 
-         <img src="/icons/backgrounddemo.png">
-  
       </div>
       <ul class="menu__list">
         <li>
           <a target="_self" rel="noopener" href="/index.html">Home</a>
         </li>
         <li>
-          <a target="_self" rel="noopener" href="/products.html ">Products</a>
+          <a target="_self" rel="noopener" href="/products.html">Products</a>
         </li>
         <li>
           <a target="_self" rel="noopener" href="/map.html">Map</a>
@@ -91,57 +103,18 @@
       </ul>
     </div>
 
-
     <div class="menu__overlay"></div>
 
-
- 
-  <main class="main">
-
-    <div class="homeimage">
-<img src="/icons/cbrandslogo.png">
-    </div>
-    
- 
-  
-
-
-<div class="fab fab__push">
-        <div class="fab__ripple"></div>
-        <img class="fab__image" src="/icons/push-off.png" alt="Push Notification" />
-      </div>
-   
-   
-
-
+  <main class="main"> 
   </main>
 
- 
- 
-<div class="dialog-container">
-    <div class="dialog">
-      <div class="dialog-title">Brand</div>
-      <div class="dialog-body">
-        <select id="selectCityToAdda">
-          <!-- Values map to Yahoo Weather API Where On Earth Identifiers (WOEIDs).
-               https://developer.yahoo.com/weather/documentation.html#req -->
-          <option value="0">  Modelo  </option>
-          <option value="1">  Corona  </option>
-          <option value="2">  Pacifico  </option>
-          <option value="3">  Victoria  </option>
-          <option value="4">  Barrilito  </option>
-          <option value="5">  Tocoya  </option>
-          <option value="6">  Leon  </option>
-        </select>
-      </div>
-      <div class="dialog-buttons">
-        <button id="butAddCity" class="button">Add</button>
-        <button id="butAddCancel" class="button">Cancel</button>
-      </div>
-    </div>
+
+  <div class="loader">
+    <svg viewBox="0 0 32 32" width="32" height="32">
+      <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+    </svg>
   </div>
 
-  
 
 
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
@@ -158,14 +131,112 @@
   firebase.initializeApp(config);
 </script>
 
+
+<!-- MAP CODE --> 
+<div id="map"></div>
+    <script type="text/javascript">
+
+     console.log("Yee"); 
+
+     function initMap() {
+
+       var locations = []
+
+       var url = 'https://cbi-api-internal-qa.herokuapp.com/v2/beerStores?apiKey=compass-beer&filterUnsold=Y&includeStoreRank=Y&lowerRightBound=37.330966%2C-118.029159&signature=AziYxd1PhDbUvQIAjSBfgb5fs3nsAHeO848/Y4j3FDg%3D&upperLeftBound=37.338737%2C-122.037399';
+
+        // Fetch the latest data.
+    fetch(url,{mode: 'cors'})
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+      console.log(responseJson.length); 
+
+        for(var i = 0; i < responseJson.length; i++) {
+            locations[i] = {lat: responseJson[i].latitude, lng: responseJson[i].longitude};    
+        }
+
+          var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: {lat: 37.3327, lng: -121.9012}
+        });
+
+          var custommapStyle = [
+  {
+    featureType: "all",
+    elementType: "labels",
+    stylers: [
+      { visibility: "off" }
+    ]
+  }
+]
+
+map.set('styles',custommapStyle);
+
+         var options = {
+        styles: [{
+          textColor: 'white',
+          height: 100,
+          url: "icons/PinOverlap@2x.png",
+          width: 100, 
+        }]
+      }
+
+        var markers = locations.map(function(location, i) {
+
+          console.log(responseJson[i].store_name); 
+
+           var infowindow = new google.maps.InfoWindow({
+          content: responseJson[i].store_name
+        });
+
+          var newmarker = new google.maps.Marker({
+            position: location,
+             icon: "/icons/PinLiquorBlue@2x.png"
+          });
+
+          newmarker.addListener('click',function() {
+            console.log("Click Click Click"); 
+            infowindow.open(map,newmarker); 
+          });
+
+          return newmarker;  
+        });
+
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,options);
+        markerCluster.setCalculator(function(markers,numStyles) {
+
+          var index = 0; 
+          var count = markers.length; 
+          var dv = count; 
+          while(dv !== 0){
+            dv = parseInt(dv / 10, 10); 
+            index++; 
+          }
+
+          index = Math.min(index,numStyles); 
+          return {
+            text: "", 
+            index:index
+          }; 
+        }); 
+      
+    
+    });
+
+  }
+    </script>
+    
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> 
-
-
   <!-- Uncomment the line below when ready to test with fake data -->
-  
+   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9p7xIJwPgXx3QrTcx2GX9w3lDCxkou1Y&callback=initMap"
+    async defer></script>
   <script src="scripts/menu.js" async></script>
+  
  
-  <script src="scripts/push.js"></script>
+
 
 </body>
 </html>

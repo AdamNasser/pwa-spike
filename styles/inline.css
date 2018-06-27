@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License.
+ * limitations under the License.   cbrands blue : #0F77B8,    accessory background white : #F6FAFF;
  */
 
 * {
@@ -30,7 +30,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale; }
 
 html {
-  overflow: hidden; }
+   }
 
 body {
   display: -webkit-box;
@@ -56,16 +56,134 @@ body {
   -webkit-align-content: stretch;
       -ms-flex-line-pack: stretch;
           align-content: stretch;
-  background: #ececec; }
+  background: #ffffff; }
+
+
+
+
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+/*the container must be positioned relative:*/
+.custom-select {
+  position: relative;
+  font-family: Arial;
+  font-size: .6em; 
+}
+.custom-select select {
+  display: none; /*hide original SELECT element:*/
+}
+.select-selected {
+  background-color: gray;
+}
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: #0F77B8;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+/*hide the items when the select box is closed:*/
+.select-hide {
+  display: none;
+}
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+  .jumbotron {
+  padding: 1rem; 
+  border-radius:0;
+  width: 100%;
+  position:fixed; 
+  font-size: .6em; 
+
+
+
+
+}
+
+.container-fluid .padding {
+  padding-bottom: 8rem; 
+  padding-top: 5rem;
+
+
+}
 
 .header {
   width: 100%;
-  height: 56px;
+  height: 70px;
   color: #FFF;
-  background: #3F51B5;
+  background: #0F77B8;
   position: fixed;
   font-size: 20px;
-  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 2px 9px 1px rgba(0, 0, 0, 0.12), 0 4px 2px -2px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
   padding: 16px 16px 0 16px;
   will-change: transform;
   display: -webkit-box;
@@ -96,18 +214,210 @@ body {
   transition: transform 0.233s cubic-bezier(0, 0, 0.21, 1) 0.1s;
   transition: transform 0.233s cubic-bezier(0, 0, 0.21, 1) 0.1s, -webkit-transform 0.233s cubic-bezier(0, 0, 0.21, 1) 0.1s;
   z-index: 1000; }
-  .header .headerButton {
-    width: 24px;
-    height: 24px;
-    margin-right: 16px;
+  .header__icon {
+  width: 48px;
+  height: 48px;
+  float: left;
+
+
+  /*
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  */
+}
+
+.header #butAdd {
+    background: url(/icons/gps.svg) center center no-repeat; 
+    margin-top: 5px; 
+    margin-right: 15px; 
+
+  }
+
+.fab {
+  width: 76px;
+  height: 76px;
+  background: #546e7a;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 25px;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.fab.active {
+  background: #faab1a;
+}
+
+.fab__ripple {
+  position: absolute;
+  left: -17px;
+  bottom: -12px;
+  width: 56px;
+  height: 56px;
+  -webkit-transform: scale(0.5);
+  transform: scale(0.5);
+  background: #fff;
+  border-radius: 50%;
+  -webkit-transform-origin: 50%;
+  transform-origin: 50%;
+  transition: -webkit-transform 0.35s cubic-bezier(0, 0, 0.3, 1) 0ms;
+  transition: transform 0.35s cubic-bezier(0, 0, 0.3, 1) 0ms;
+  transition: transform 0.35s cubic-bezier(0, 0, 0.3, 1) 0ms, -webkit-transform 0.35s cubic-bezier(0, 0, 0.3, 1) 0ms;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  z-index: 2;
+  opacity: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.fab:active .fab__ripple {
+  opacity: 0.2;
+  -webkit-transform: scale(1) translate(31%, -22%);
+  transform: scale(1) translate(31%, -22%);
+}
+
+.fab__image {
+  overflow: hidden;
+  z-index: 3;
+}
+
+
+.header__icon:active {
+  opacity: 0.8;
+  outline:  solid #fff;
+}
+.menu{
+  width: 280px;
+  height: 100%;
+  background: #fff;
+  position: fixed;
+  top: 120px;
+  bottom: 0;
+  box-shadow: none;
+  z-index: 1;
+  transition: -webkit-transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0, 0, 0.3, 1), -webkit-transform 0.3s cubic-bezier(0, 0, 0.3, 1);
+  -webkit-transform: translateX(-110%);
+  transform: translateX(-110%);
+  will-change: transform;
+  z-index: 2;
+}
+
+.menu--show {
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+}
+
+.menu__overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  transition: opacity 0.15s cubic-bezier(0, 0, 0.3, 1);
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1;
+}
+
+.menu__overlay--show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.menu__header {
+  margin-top: -50px; 
+  height: 100px;
+  background: #ffffff;
+  color: #ffffff;
+  border-bottom: 0px solid #ffffff;
+  font-size: 14px;
+
+}
+
+.menu__header img {
+  height: 120%; 
+  width: 100%; 
+}
+
+.menu__list {
+  width: inherit;
+  height: inherit;
+  overflow: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  background-color: #0F77B8;
+}
+
+.menu__list li {
+  border: 0;
+  padding: 0;
+  box-shadow: none;
+  border-radius: 0;
+  color: rgba(15, 119, 184, 1);
+
+}
+
+.menu__list li a {
+  padding: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  display: block;
+  margin-right: 0px; 
+  text-decoration: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.menu__list li a:active,
+.menu__list li a:hover {
+ 
+}
+
+.header-right {
+float: right;  
+margin-left: 600px;
+ 
+
+}
+
+   .headerButton {
+    width: 34px;
+    height: 34px;
     text-indent: -30000px;
-    overflow: hidden;
     opacity: 0.54;
     -webkit-transition: opacity 0.333s cubic-bezier(0, 0, 0.21, 1);
     transition: opacity 0.333s cubic-bezier(0, 0, 0.21, 1);
     border: none;
     outline: none;
-    cursor: pointer; }
+    cursor: pointer; 
+    position: fixed;
+    top: 8px; 
+    right: 0px; 
+    background-color: #ffffff; 
+    fill: #ffffff; 
+
+    
+
+  }
   .header #butRefresh {
     background: url(/images/ic_refresh_white_24px.svg) center center no-repeat; }
   .header #butAdd {
@@ -181,8 +491,24 @@ body {
     -webkit-transform: rotate(90deg);
             transform: rotate(90deg); } }
 
+
+
+.vertical1{
+  position: relative;
+
+
+}
+
+.vertical2{
+  
+  left: 0px; 
+  top: 60px;
+  position: absolute;
+
+}
+
 .main {
-  padding-top: 60px;
+  padding-top: 165px;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
       -ms-flex: 1;
@@ -247,26 +573,88 @@ body {
     padding:16px;
   }
 
+
+   .homeimage img {
+position: fixed;
+width: 250px;
+height: 200px;
+top: 50%;
+left: 50%;
+margin-top: -100px; /* Negative half of height. */
+margin-left: -125px; 
+/* Negative half of width. *
+   }
+
+   .column {
+    float: left;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+}
+
+  .left {
+    width: 85%; 
+  }
+
+  .right {
+    width: 15%;
+    background-color: white; 
+  }
+
+  /* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+
+}
+
+.card img {
+  width: 100%;
+  height:100%;
+   
+}
+
 .card {
   padding: 16px;
   position: relative;
   box-sizing: border-box;
-  background: #fff;
+  background: #FFFFFF;
   border-radius: 2px;
-  margin: 16px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  margin-top: 0px; 
+  margin-left: -20px; 
+  margin-right: -20px; 
+  }
 
 .weather-forecast .location {
+  position: absolute;
+  top: 15px; 
+  left: 25px;
   font-size: 1.75em; 
   padding: 16px;
+  color:#ffffff;
 
 }
 
-.weather-forecast .date, .weather-forecast .description {
+.weather-forecast .date   {
   font-size: 1.25em;
   padding: 16px; 
+  color:#ffffff;
+  position: absolute;
+  top: 65px; 
+  left: 25px;
 
 }
+
+.weather-forecast .description  {
+  font-size: 1.25em;
+  padding: 16px; 
+  color:#ffffff;
+  position: absolute;
+  top: 110px; 
+  left: 25px;
+
+}
+
 
 .weather-forecast .current {
   display: -webkit-box;
@@ -356,17 +744,36 @@ body {
   .weather-forecast .icon.thunderstorms {
     background-image: url("/images/thunderstorm.png"); }
 
-@media (max-width: 450px) {
-  .weather-forecast .date, .weather-forecast .description {
-    font-size: 0.9em; }
+
   .weather-forecast .current .icon {
     width: 96px;
     height: 96px; }
   .weather-forecast .current .visual {
-    font-size: 3em; }
+    font-size: 10em; }
   .weather-forecast .future .oneday .icon {
     width: 32px;
     height: 32px; } }
+    
+  .weather-forecast .location {
+    font-size: 350%;
+  }
+
+  .weather-forecast .description, .weather-forecast .date {
+    font-size: 140%;
+    font-weight: 400%;
+    padding-bottom: .2rem;
+  }
+
+  @media (max-width: 576px) {
+    .weather-forecast .location {
+      font-size: 150%;
+    }
+
+    .weather-forecast .description, .weather-forecast .date {
+      font-size: 100%;
+    }
+  }
+
 
 .mdl-button {
   background: transparent;
