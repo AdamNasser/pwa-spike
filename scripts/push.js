@@ -43,7 +43,7 @@
   function subscribePush() {
     navigator.serviceWorker.ready.then(function(registration) {
       if (!registration.pushManager) {
-        alert('Your browser doesn\'t support push notification.');
+        alert('iOS doesn\'t support push notifications. :(');
         return false;
       }
 
@@ -55,7 +55,7 @@
         toast('Subscribed successfully.');
         console.info('Push notification subscribed.');
         changePushStatus(true);
-        sendPushNotification();
+        //sendPushNotification();
       })
       .catch(function (error) {
         changePushStatus(false);
@@ -100,11 +100,11 @@
     fabPushElement.checked = status;
     if (status) {
       fabPushElement.classList.add('active');
-      fabPushImgElement.src = '../icons/push-on.png';
+      fabPushImgElement.src = '/icons/push-on.png';
     }
     else {
      fabPushElement.classList.remove('active');
-     fabPushImgElement.src = '../icons/push-off.png';
+     fabPushImgElement.src = '/icons/push-off.png';
     }
   }
 

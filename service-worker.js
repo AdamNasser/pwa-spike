@@ -7,14 +7,21 @@
 //      http://www.apache.org/licenses/LICENSE-2.0
 // 
 
-var dataCacheName = 'productData-v1';
+
+
+
+
+ 
+
+var dataCacheName = 'productData-1';
 var cacheName = 'productData-final-1';
 var filesToCache = [
 '/', 
 '/index.html', 
 '/scripts/app.js',  
-'/map.html', 
-'/products.html'
+'/products.html', 
+'/home.html', 
+'/map.html'
 ];
 
 self.addEventListener('install', function(e) {
@@ -24,6 +31,7 @@ self.addEventListener('install', function(e) {
     caches.open(cacheName).then(function(cache) {
       console.log('[ServiceWorker] Caching app shell');
       return cache.addAll(filesToCache);
+      //testing123
     })
   );
 });
@@ -60,4 +68,22 @@ self.addEventListener('fetch', function(e) {
       return response || fetch(e.request);
     })
   );
+});
+
+
+
+
+
+self.addEventListener('push', function(event) {
+  console.log('[Service Worker] Push Received.');
+  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+
+  const title = 'New Account Asset Captured';
+  const options = {
+    body: 'Click to View',
+    icon: '/icons/PinLiquorBlue.png',
+    badge: '/icons/ms-icon-70x70.png'
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
 });

@@ -1,4 +1,3 @@
-
 <!--
  Copyright 2016 Google Inc.
  
@@ -67,10 +66,33 @@
 
           </div>
 
+  </header>
+
+ <div class="menu">
+      <div class="menu__header">
+        
+    
+        <img src="/icons/backgrounddemo.png">
+
+      </div>
+      <ul class="menu__list">
+        <li>
+          <a target="_self" rel="noopener" href="/index.html">Home</a>
+        </li>
+        <li>
+          <a target="_self" rel="noopener" href="/home.html">Offline Demo</a>
+        </li>
+        <li>
+          <a target="_self" rel="noopener" href="/map.html">Map</a>
+        </li>
+      </ul>
+    </div>
 
 
+    <div class="menu__overlay"></div>
 
-          <div class="vertical2"> 
+    
+         <div class="vertical2"> 
         <!--- Jumbo Tron --> 
     <div class="container-fluid"> 
           <div class="row jumbotron" style="background-color: #E8E9ED; color: #000000"> 
@@ -105,41 +127,7 @@
       
 
 
-     
-
-
-
-
-     
  
-    
-  
-  </header>
-
-
-
-  <div class="menu">
-      <div class="menu__header">
-        
-        <h1>MENU</h1>
-        <img src="/icons/backgrounddemo.png">
-
-      </div>
-      <ul class="menu__list">
-        <li>
-          <a target="_self" rel="noopener" href="/index.html">Home</a>
-        </li>
-        <li>
-          <a target="_self" rel="noopener" href="/home.html">Products</a>
-        </li>
-        <li>
-          <a target="_self" rel="noopener" href="/map.html">Map</a>
-        </li>
-      </ul>
-    </div>
-
-
-    <div class="menu__overlay"></div>
 
 
  
@@ -151,8 +139,6 @@
     
 
     <div class=" card cardTemplate weather-forecast" hidden>
-    
-
       <img src = "/icons/backgrounddemo.png">
       <div class="city-key" hidden></div>
       <div class="card-last-updated" hidden></div>
@@ -160,7 +146,6 @@
       <div class="date"></div>
       <div class="description"></div>
       <div class="future">
-
       </div>
     
       
@@ -222,6 +207,7 @@
   <!-- Uncomment the line below when ready to test with fake data -->
   <script src="scripts/app.js" async></script>
   <script src="scripts/menu.js" async></script>
+  <script src="scripts/toast.js" async></script>
  
 
 
